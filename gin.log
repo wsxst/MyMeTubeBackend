@@ -1,0 +1,13 @@
+[GIN-debug] GET    /static/*filepath         --> MeTube/vendor/github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> MeTube/vendor/github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] GET    /                         --> MeTube/routers.loadRouters.func1 (3 handlers)
+[GIN-debug] POST   /viewvideo                --> MeTube/controllers.ViewVideo (3 handlers)
+[GIN-debug] POST   /getvideocomments         --> MeTube/controllers.GetVideoComments (3 handlers)
+[GIN-debug] POST   /comment                  --> MeTube/controllers.CommentAVideo (3 handlers)
+[GIN-debug] POST   /reply                    --> MeTube/controllers.ReplyAUser (3 handlers)
+[GIN-debug] POST   /replylike                --> MeTube/controllers.ReplyLike (3 handlers)
+[GIN-debug] POST   /commentlike              --> MeTube/controllers.CommentLike (3 handlers)
+[GIN-debug] GET    /getvideo/:videoid        --> MeTube/controllers.GetVideo (3 handlers)
+[GIN-debug] POST   /removecomment            --> MeTube/controllers.RemoveComment (3 handlers)
+[GIN-debug] POST   /removereply              --> MeTube/controllers.RemoveReply (3 handlers)
+[GIN-debug] Listening and serving HTTP on :8081
