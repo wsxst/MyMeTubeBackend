@@ -30,4 +30,5 @@ func loadRouters(router *gin.Engine) {
 	router.GET("/getvideo/:videoid", controllers.GetVideo)
 	router.POST("/removecomment", controllers.RemoveComment)
 	router.POST("/removereply", controllers.RemoveReply)
+	router.POST("/getreplies", controllers.GetReplies)
 }

@@ -24,7 +24,7 @@ func ViewVideo(c *gin.Context) {
 	models.AddVideoView(requestInfo.VideoId, requestInfo.UserId)
 	err = models.AddViewCountByVideoId(requestInfo.VideoId)
 	if err != nil {
-		fmt.Println("Like comment failed. Error:", err)
+		fmt.Println("Update view_count failed. Error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": consts.UpdateErrCode,
 			"msg":    "更新记录失败！",
@@ -57,6 +57,7 @@ func GetVideoComments(c *gin.Context) {
 		UserReplies []*UserReply
 		Like        bool    `json:"like"`
 		LikeCount   int64   `json:"like_count"`
+		ReplyCount  int64     `json:"reply_count"`
 	}
 	requestInfo := models.GetCommentRequest{}
 	err :=c.BindJSON(&requestInfo)
@@ -88,7 +89,7 @@ func GetVideoComments(c *gin.Context) {
 	}
 	var videoComments []*VideoComment
 	for _, comment := range comments {
-		replies := models.GetRepliesByCommentId(comment.Id)
+		replies := models.GetOnePageRepliesByCommentId(comment.Id, requestInfo.ReplyStart, requestInfo.ReplyFoldLimit)
 		fmt.Println(replies)
 		var userReplies []*UserReply
 		for _, reply := range replies {
@@ -107,6 +108,7 @@ func GetVideoComments(c *gin.Context) {
 			UserReplies:userReplies,
 			Like:models.JudgeLikeComment(requestInfo.UserId, comment.Id),
 			LikeCount:comment.LikeCount,
+			ReplyCount: models.GetCommentByCommentId(comment.Id).ReplyCount,
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -396,5 +398,44 @@ func RemoveReply(c *gin.Context)  {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"msg": "删除评论成功！",
+	})
+}
+
+func GetReplies(c *gin.Context)  {
+	type UserReply struct {
+		Reply     *models.MUserReply
+		SendUser  *models.MUser
+		RecvUser  *models.MUser
+		Like      bool   `json:"like"`
+		LikeCount int64  `json:"like_count"`
+	}
+	requestInfo := models.GetRepliesRequest{}
+	err :=c.BindJSON(&requestInfo)
+	if err != nil {
+		fmt.Println("Parse body failed. Error:", err)
+		c.JSON(http.StatusNotImplemented, gin.H{
+			"status": consts.ParamErrCode,
+			"msg":    "params 格式错误",
+		})
+	}
+	replies := models.GetOnePageRepliesByCommentId(requestInfo.CommentId, requestInfo.Start, requestInfo.Limit)
+	fmt.Println(replies)
+	var userReplies []*UserReply
+	for _, reply := range replies {
+		userReply := &UserReply{}
+		userReply.Reply = reply
+		userReply.SendUser = models.GetUserByID(reply.SendUserId)
+		userReply.RecvUser = models.GetUserByID(reply.RecvUserId)
+		userReply.LikeCount = reply.LikeCount
+		userReply.Like = models.JudgeLikeReply(requestInfo.UserId, reply.Id)
+		userReplies = append(userReplies, userReply)
+	}
+	total := models.GetCommentByCommentId(requestInfo.CommentId).ReplyCount
+	c.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": gin.H{
+			"UserReplies": userReplies,
+			"total": total,
+		},
 	})
 }

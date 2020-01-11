@@ -17,7 +17,7 @@ type MVideo struct {
 	Avatar       string    `gorm:"column:avatar" json:"avatar"`
 	Owner        int64     `gorm:"column:owner" json:"owner"`
 	TypeName     string    `gorm:"column:typename" json:"typename"`
-	ViewCount    int64     `gorm:"column:view_count" json:"view_count"`
+	ViewCount    int64     `gorm:"column:views" json:"view_count"`
 	CommentCount int64     `gorm:"column:comment_count" json:"comment_count"`
 }
 
@@ -46,7 +46,7 @@ func AddCommentCountByVideoId(videoId int64) error {
 }
 
 func AddViewCountByVideoId(videoId int64) error {
-	err := db.ORM.Model(&MVideo{}).Where("id = ?", videoId).Update("view_count", gorm.Expr("view_count + ?", 1)).Error
+	err := db.ORM.Model(&MVideo{}).Where("id = ?", videoId).Update("views", gorm.Expr("views + ?", 1)).Error
 	if err != nil {
 		return err
 	}

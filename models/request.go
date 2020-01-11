@@ -15,11 +15,13 @@ type ReplyRequest struct {
 }
 
 type GetCommentRequest struct {
-	UserId   int64 `json:"user_id"`
-	Start    int64 `json:"start"`
-	Limit    int64 `json:"limit"`
-	VideoId  int64 `json:"video_id"`
-	SortType int64 `json:"sort_type"`
+	UserId         int64 `json:"user_id"`
+	Start          int64 `json:"start"`
+	Limit          int64 `json:"limit"`
+	VideoId        int64 `json:"video_id"`
+	SortType       int64 `json:"sort_type"`
+	ReplyStart     int64 `json:"reply_start"`
+	ReplyFoldLimit int64 `json:"reply_fold_limit"`
 }
 
 type ReplyLikeRequest struct {
@@ -37,4 +39,11 @@ type CommentLikeRequest struct {
 type ViewRequest struct {
 	VideoId   int64 `json:"video_id"`
 	UserId    int64 `json:"user_id"`
+}
+
+type GetRepliesRequest struct {
+	UserId     int64 `json:"user_id"`
+	Start      int64 `json:"start"`
+	Limit      int64 `json:"limit"`
+	CommentId  int64 `json:"comment_id"`
 }

@@ -21,10 +21,10 @@ func (p *MUserReply) TableName() string {
 	return "user_reply"
 }
 
-func GetRepliesByCommentId(commentId int64) []*MUserReply {
+func GetOnePageRepliesByCommentId(commentId int64, replyStart int64, replyFoldLimit int64) []*MUserReply {
 	var replies []*MUserReply
 
-	err := db.ORM.Where("comment_id = ?", commentId).Order("like_count desc").Order("reply_time desc").Find(&replies).Error
+	err := db.ORM.Where("comment_id = ?", commentId).Limit(replyFoldLimit).Offset((replyStart - 1)*replyFoldLimit).Order("like_count desc").Order("reply_time desc").Find(&replies).Error
 	if err != nil {
 		return nil
 	}
