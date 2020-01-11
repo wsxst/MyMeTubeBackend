@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// 设置跨域
 	//r.Use(cors.Default())

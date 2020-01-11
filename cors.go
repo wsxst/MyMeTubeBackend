@@ -14,7 +14,7 @@ func Cors() gin.HandlerFunc {
 	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Cookie","token"}
 	if gin.Mode() == gin.ReleaseMode {
 		// 生产环境需要配置跨域域名，否则403
-		config.AllowOrigins = []string{"http://www.example.com"}
+		config.AllowOrigins = []string{"http://182.92.104.192"}
 	} else {
 		// 测试环境下模糊匹配本地开头的请求
 		config.AllowOriginFunc = func(origin string) bool {
